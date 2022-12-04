@@ -1,7 +1,7 @@
 import MetaHead from '../partials/MetaHead'
 import get_CMS_page_ids from '../lib/get_CMS_page_Ids'
 import authFetch from '../lib/authFetch'
-import Homepage from '../partials/pages/Homepage'
+import Homepage from '../partials/pages/home/Homepage'
 
 export default function Home({content}) {
   return (
