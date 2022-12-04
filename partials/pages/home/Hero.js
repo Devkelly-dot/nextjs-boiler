@@ -11,24 +11,24 @@ export default function Hero({content})
 
     return(
         <div className="leading-normal tracking-normal text-white gradient" style={styles.gradient}>
-            <div class="pt-24">
-            <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+            <div className="pt-24">
+            <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
                 {/*LEFT col*/}
-                <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
+                <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
 
                 <div dangerouslySetInnerHTML={{__html: heroText}}></div>
                 
-                <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                <button className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
                     Subscribe
                 </button>
                 </div>
                 {/*right col*/}
-                <div class="w-full md:w-3/5 py-6 text-center">
-                <img class="w-full md:w-4/5 z-50" src={content.heroImage} />
+                <div className="w-full md:w-3/5 py-6 text-center">
+                <img className="w-full md:w-4/5 z-50" src={content.heroImage} />
                 </div>
             </div>
             </div>
-            <div class="relative -mt-12 lg:-mt-24">
+            <div className="relative -mt-12 lg:-mt-24">
             <svg viewBox="0 0 1428 174" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                 <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                 <g transform="translate(-2.000000, 44.000000)" fill="#FFFFFF" fillRule="nonzero">
