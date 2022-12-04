@@ -1,4 +1,4 @@
-export default function Information({content})
+export default function GetStarted({content})
 {
     const styles = {
         gradient: {
