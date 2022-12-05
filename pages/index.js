@@ -14,7 +14,7 @@ export default function Home({content}) {
 
 export async function getStaticProps(context) {
   const page_ids = get_CMS_page_ids()
-  const url = `http://127.0.0.1:8000/api/v2/homeContent/${page_ids["home"]}`
+  const url = process.env.NEXT_PUBLIC_REACT_APP_API+`homeContent/${page_ids["home"]}`
   let content = await authFetch(url,{}).then((response)=>response.json())
   
   return {
