@@ -9,29 +9,48 @@ export default function BlogIndex(props)
 {
     const router = useRouter()
     const display_num = 1
-    const [displayedArticles,setDisplayedArticles] = useState([])
-    const [client_page,setClientPage] = useState(0)
-    const [server_page,setServerPage] = useState(props.routerInfo.page)
-    const [canAskServer,setCanAskServer] = useState(true)
+    const [loadedArticles,setLoadedArticles] = useState(props.posts.items) // store every article we grab from the CMS here
+    const [displayedArticles,setDisplayedArticles] = useState([]) // The articles being displayed on the blog index page
+    const [client_page,setClientPage] = useState(0) // what page the client is on (displayed at the bottom of the blog index page)
+    const [server_page,setServerPage] = useState(props.routerInfo.page) // what page the server is on for pagnation
+    const [canAskServer,setCanAskServer] = useState(true) // if we know the server has no more articles - don't keep asking
     
     useEffect(()=>{
-        client_page_change(0)
+        setClientPage(0)
+        setCanAskServer(true)
+        setServerPage(props.routerInfo.page)
+        setLoadedArticles(props.posts.items)
+        client_page_change(0,props.posts.items)
     },[props.posts])
 
-    async function client_page_change(num)
+    async function client_page_change(num,posts)
     {
-        const posts = props.posts.items
+        if(num < 0)
+            return false
+        
 
         if(posts.slice(display_num*num,display_num*num+display_num).length > 0)
         {
             setClientPage(num)
             setDisplayedArticles(posts.slice(display_num*num,display_num*num+display_num))
         }
-        else 
+        else if(canAskServer)
         {
             let url = props.routerInfo.url+"&offset="+(props.routerInfo.page_size*(server_page+1))
             let new_posts = await authFetch(url,{}).then((response)=>response.json())
-            console.log(new_posts)
+            if(new_posts.items.length <= 0)
+            {
+                setCanAskServer(false)
+                return false 
+            }
+            for(let i in new_posts.items)
+            {
+                posts.push(new_posts.items[i])
+            }
+            setLoadedArticles(posts)
+            setClientPage(num)
+            setServerPage(server_page+1)
+            client_page_change(num,posts)
             return;
         }
     }
@@ -82,9 +101,10 @@ export default function BlogIndex(props)
                     }
 
                     <div className="flex items-center py-8">
-                        <div className="h-10 w-10 font-semibold text-gray-800 hover:text-gray-900 text-sm flex items-center justify-center mr-3 cursor-pointer" onClick={()=>client_page_change(client_page-1)}>Previous <i className="fas fa-arrow-right ml-2"></i></div>
-                        <div className="h-10 w-10 bg-blue-800 hover:bg-blue-600 font-semibold text-white text-sm flex items-center justify-center">{client_page+1}</div>
-                        <div className="h-10 w-10 font-semibold text-gray-800 hover:text-gray-900 text-sm flex items-center justify-center ml-3 cursor-pointer" onClick={()=>client_page_change(client_page+1)}>Next <i className="fas fa-arrow-right ml-2"></i></div>
+                        <div className="h-10 w-10 font-semibold text-gray-800 hover:text-gray-900 text-sm flex items-center justify-center mr-3 cursor-pointer" onClick={()=>client_page_change(client_page-1,loadedArticles)}>Previous <i className="fas fa-arrow-right ml-2"></i></div>
+                        <div className="h-10 w-10 font-semibold text-gray-800 text-sm flex items-center justify-center cursor-pointer" onClick={()=>client_page_change(0,loadedArticles)}>1</div>
+                        <div className="h-10 w-10 font-semibold bg-blue-600 text-white text-sm flex items-center justify-center">{client_page+1}</div>
+                        <div className="h-10 w-10 font-semibold text-gray-800 hover:text-gray-900 text-sm flex items-center justify-center ml-3 cursor-pointer" onClick={()=>client_page_change(client_page+1,loadedArticles)}>Next <i className="fas fa-arrow-right ml-2"></i></div>
                     </div>
 
                 </section>
