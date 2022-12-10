@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 export default function BlogIndex(props)
 {
     const router = useRouter()
-    const display_num = 1
+    const display_num = 2 // how many articles we display at on the screen
     const [loadedArticles,setLoadedArticles] = useState(props.posts.items) // store every article we grab from the CMS here
     const [displayedArticles,setDisplayedArticles] = useState([]) // The articles being displayed on the blog index page
     const [client_page,setClientPage] = useState(0) // what page the client is on (displayed at the bottom of the blog index page)
@@ -16,16 +16,24 @@ export default function BlogIndex(props)
     const [canAskServer,setCanAskServer] = useState(true) // if we know the server has no more articles - don't keep asking
     
     useEffect(()=>{
-        setClientPage(0)
-        setCanAskServer(true)
-        setServerPage(props.routerInfo.page)
-        setLoadedArticles(props.posts.items)
-        client_page_change(0,props.posts.items)
+        function setDefaults()
+        {
+            setClientPage(0)
+            setCanAskServer(true)
+            setServerPage(props.routerInfo.page)
+            setLoadedArticles(props.posts.items)
+        }
+
+        setDefaults() // we want to reset defaults when user clicks a new tag
+        client_page_change(0,props.posts.items) // sending props.posts.items because this will be the new posts once we incorporate tag. loadedArticles state will not have updated yet.
     },[props.posts])
 
     async function client_page_change(num,posts)
     {
-        if(num < 0)
+        //num = what page we are attempting to switch to (usually current page plus or minus 1)
+        //posts = what array of articles we are working with 
+
+        if(num < 0) // cannot go to page -1 
             return false
         
 
@@ -86,7 +94,7 @@ export default function BlogIndex(props)
             <div className="container mx-auto flex flex-wrap py-6">
                 <section className="w-full md:w-2/3 flex flex-col items-center px-3">
                     {
-                        displayedArticles.map((post)=>
+                        displayedArticles.length>0?displayedArticles.map((post)=>
                             <article className="flex flex-col shadow my-4" key={post.title}>
                                 <a href="#" className="hover:opacity-75">
                                     <img src={post.cover_image_url}/>
@@ -96,8 +104,20 @@ export default function BlogIndex(props)
                                     <a href="#" className="pb-6">{post.intro}...</a>
                                     <a href="#" className="uppercase text-gray-800 hover:text-black">Continue Reading <i className="fas fa-arrow-right"></i></a>
                                 </div>
-                            </article>
-                        )
+                            </article>):(
+                                props.posts.items.map((post)=>
+                                <article key={post.title}>
+                                    <a href="#" className="hover:opacity-75">
+                                        <img src={post.cover_image_url}/>
+                                    </a>
+                                    <div className="bg-white flex flex-col justify-start p-6">
+                                        <a href="#" className="text-3xl font-bold hover:text-gray-700 pb-4">{post.title}</a>
+                                        <a href="#" className="pb-6">{post.intro}...</a>
+                                        <a href="#" className="uppercase text-gray-800 hover:text-black">Continue Reading <i className="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </article>
+                            )
+                            )
                     }
 
                     <div className="flex items-center py-8">
@@ -133,7 +153,7 @@ export default function BlogIndex(props)
                             <img className="hover:opacity-75" src="https://source.unsplash.com/collection/1346951/150x150?sig=9"/>
                         </div>
                         <a href="#" className="w-full bg-blue-800 text-white font-bold text-sm uppercase rounded hover:bg-blue-700 flex items-center justify-center px-2 py-3 mt-6">
-                            <i className="fab fa-instagram mr-2"></i> Follow @dgrzyb
+                            <i className="fab fa-instagram mr-2"></i> Follow @Best Boiler
                         </a>
                     </div>
 
@@ -146,7 +166,7 @@ export default function BlogIndex(props)
 
 export async function getServerSideProps(context) {
     let page = 0
-    const page_size = 1
+    const page_size = 20
     const accept_params = [{"param":"page","value":0}, {"param":"type","value":null}]
     const page_ids = get_CMS_page_ids()
 
