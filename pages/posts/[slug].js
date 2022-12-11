@@ -1,6 +1,6 @@
 import authFetch from '../../lib/authFetch'
 import MetaHead from "../../partials/MetaHead"
-import BlogBody from '../../partials/BlogBody'
+import BlogBody from '../../partials/blog/BlogBody'
 
 export default function BlogPost(props)
 {

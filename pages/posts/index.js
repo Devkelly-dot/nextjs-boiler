@@ -4,11 +4,11 @@ import get_CMS_page_ids from '../../lib/get_CMS_page_Ids'
 import authFetch from '../../lib/authFetch'
 import { useState,  useEffect} from "react"
 import { useRouter } from 'next/router'
-
+import BlogList from '../../partials/blog/BlogList'
 export default function BlogIndex(props)
 {
     const router = useRouter()
-    const display_num = 2 // how many articles we display at on the screen
+    const display_num = 1 // how many articles we display at on the screen
     const [loadedArticles,setLoadedArticles] = useState(props.posts.items) // store every article we grab from the CMS here
     const [displayedArticles,setDisplayedArticles] = useState([]) // The articles being displayed on the blog index page
     const [client_page,setClientPage] = useState(0) // what page the client is on (displayed at the bottom of the blog index page)
@@ -93,33 +93,8 @@ export default function BlogIndex(props)
 
             <div className="container mx-auto flex flex-wrap py-6">
                 <section className="w-full md:w-2/3 flex flex-col items-center px-3">
-                    {
-                        displayedArticles.length>0?displayedArticles.map((post)=>
-                            <article className="flex flex-col shadow my-4" key={post.title}>
-                                <a href="#" className="hover:opacity-75">
-                                    <img src={post.cover_image_url}/>
-                                </a>
-                                <div className="bg-white flex flex-col justify-start p-6">
-                                    <a href="#" className="text-3xl font-bold hover:text-gray-700 pb-4">{post.title}</a>
-                                    <a href="#" className="pb-6">{post.intro}...</a>
-                                    <a href="#" className="uppercase text-gray-800 hover:text-black">Continue Reading <i className="fas fa-arrow-right"></i></a>
-                                </div>
-                            </article>):(
-                                props.posts.items.map((post)=>
-                                <article key={post.title}>
-                                    <a href="#" className="hover:opacity-75">
-                                        <img src={post.cover_image_url}/>
-                                    </a>
-                                    <div className="bg-white flex flex-col justify-start p-6">
-                                        <a href="#" className="text-3xl font-bold hover:text-gray-700 pb-4">{post.title}</a>
-                                        <a href="#" className="pb-6">{post.intro}...</a>
-                                        <a href="#" className="uppercase text-gray-800 hover:text-black">Continue Reading <i className="fas fa-arrow-right"></i></a>
-                                    </div>
-                                </article>
-                            )
-                            )
-                    }
-
+ 
+                    <BlogList articles={displayedArticles} all={props.posts.items}/>
                     <div className="flex items-center py-8">
                         <div className="h-10 w-10 font-semibold text-gray-800 hover:text-gray-900 text-sm flex items-center justify-center mr-3 cursor-pointer" onClick={()=>client_page_change(client_page-1,loadedArticles)}>Previous <i className="fas fa-arrow-right ml-2"></i></div>
                         <div className="h-10 w-10 font-semibold text-gray-800 text-sm flex items-center justify-center cursor-pointer" onClick={()=>client_page_change(0,loadedArticles)}>1</div>
@@ -166,7 +141,7 @@ export default function BlogIndex(props)
 
 export async function getServerSideProps(context) {
     let page = 0
-    const page_size = 20
+    const page_size = 1
     const accept_params = [{"param":"page","value":0}, {"param":"type","value":null}]
     const page_ids = get_CMS_page_ids()
 
