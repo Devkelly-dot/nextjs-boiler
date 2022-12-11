@@ -8,7 +8,8 @@ import BlogList from '../../partials/blog/BlogList'
 export default function BlogIndex(props)
 {
     const router = useRouter()
-    const display_num = 1 // how many articles we display at on the screen
+    const display_num = 5 // how many articles we display at on the screen
+
     const [loadedArticles,setLoadedArticles] = useState(props.posts.items) // store every article we grab from the CMS here
     const [displayedArticles,setDisplayedArticles] = useState([]) // The articles being displayed on the blog index page
     const [client_page,setClientPage] = useState(0) // what page the client is on (displayed at the bottom of the blog index page)
@@ -141,7 +142,7 @@ export default function BlogIndex(props)
 
 export async function getServerSideProps(context) {
     let page = 0
-    const page_size = 1
+    const page_size = 20
     const accept_params = [{"param":"page","value":0}, {"param":"type","value":null}]
     const page_ids = get_CMS_page_ids()
 
@@ -166,7 +167,7 @@ export async function getServerSideProps(context) {
                         url+="&offset="+String(page_size*(param_value-1))
                         page = param_value
                     }
-                break;
+                break; 
                 
                 case "type":
                     const types = param_value.split(",")
