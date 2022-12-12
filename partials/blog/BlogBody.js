@@ -30,7 +30,7 @@ export default function BlogBody(props)
             }
             if(type==='heading')
             {
-                const re = new RegExp('<b>.*</b>')
+                const re = new RegExp('<b>.*</b>')                    
                 let table_item = re.exec(props.blog_body[i].value)[0]
                 table_item = table_item.replace('<b>','')
                 table_item = table_item.replace('</b>','')
