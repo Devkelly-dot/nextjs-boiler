@@ -3,7 +3,7 @@ import MetaHead from "../partials/MetaHead"
 import BlogBody from '../partials/blog/BlogBody'
 import get_CMS_page_ids from '../lib/get_CMS_page_Ids'
 import Link from 'next/link'
-import PostBody from '../partials/PostBody'
+import PageBody from '../partials/PageBody'
 
 export default function SitePage(props)
 {
@@ -22,7 +22,7 @@ export default function SitePage(props)
 
             <div className="container mx-auto flex flex-wrap py-6">
                 <section className="w-full md:w-2/3 flex flex-col px-3">
-                    <PostBody blog_body = {props.post.body}/>
+                    <PageBody blog_body = {props.post.body}/>
                 </section>
 
                 <aside className="w-full md:w-1/3 flex flex-col items-center px-3">
