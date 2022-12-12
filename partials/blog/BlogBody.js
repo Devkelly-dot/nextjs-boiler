@@ -30,10 +30,28 @@ export default function BlogBody(props)
             }
             if(type==='heading')
             {
-                const re = new RegExp('<b>.*</b>')                    
-                let table_item = re.exec(props.blog_body[i].value)[0]
+                let re = new RegExp('<b>.*</b>')                    
+                let table_item = re.exec(props.blog_body[i].value)
+                if(table_item)
+                    table_item = table_item[0]
+                else
+                {
+                    re = new RegExp('>.*<')   
+                    table_item = re.exec(props.blog_body[i].value)
+                    console.log(table_item)
+                    if(table_item)
+                        table_item = table_item[0]
+                    else
+                    {
+                        body+=class_attributes[type].tag.replace('>',' class="'+class_attributes[type].className+'">'+props.blog_body[i].value)
+                        continue
+                    }
+                }
+
                 table_item = table_item.replace('<b>','')
                 table_item = table_item.replace('</b>','')
+                table_item = table_item.replace('>','')
+                table_item = table_item.replace('<','')
                 tableOfContents.push(table_item)
                 body+=class_attributes[type].tag.replace('>',' class="'+class_attributes[type].className+'"id="'+table_item+'">'+props.blog_body[i].value)
                 continue
