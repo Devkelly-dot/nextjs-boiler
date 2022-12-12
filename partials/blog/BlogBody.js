@@ -38,7 +38,6 @@ export default function BlogBody(props)
                 {
                     re = new RegExp('>.*<')   
                     table_item = re.exec(props.blog_body[i].value)
-                    console.log(table_item)
                     if(table_item)
                         table_item = table_item[0]
                     else

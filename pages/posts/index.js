@@ -69,9 +69,9 @@ export default function BlogIndex(props)
             <MetaHead title={props.content.title}/>
             <header className="w-full container mx-auto">
                 <div className="flex flex-col items-center py-12">
-                    <a className="font-bold text-gray-800 uppercase hover:text-gray-700 text-5xl" href="#">
+                    <h1 className="font-bold text-gray-800 uppercase hover:text-gray-700 text-5xl" href="#">
                         {props.content.title}
-                    </a>
+                    </h1>
                     <div className="text-lg text-gray-600" dangerouslySetInnerHTML={{__html:props.content.intro}}>
                     </div>
                 </div>
